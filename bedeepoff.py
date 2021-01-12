@@ -21,7 +21,7 @@ import torch.nn.utils.rnn as rnn_utils
 from Bio.Seq import Seq 
 from Bio import pairwise2
 from Bio.pairwise2 import format_alignment 
-
+import utils
 
 #Set computing environment
 use_cuda = torch.cuda.is_available()
@@ -37,14 +37,24 @@ np.random.seed(SEED)
 torch.manual_seed(SEED)
 torch.cuda.manual_seed(SEED)
 
+import argparse
+parser = argparse.ArgumentParser(description="BEdeepoff for ABEmax and AncBE4max")
+#parser.add_argument("-o","--off-output",help="Input Cas-OFFinder output or CRISPRitz output file",action='store_true')
+parser.add_argument("-b", "--base-editor", 
+                    choices=["ABE", "CBE"],
+                    required=True,
+                    help="Set base editor model")
+parser.add_argument("-i","--input-file",help="Set input tsv file")
+args = parser.parse_args()
+
 
 stoi = {'<pad>':0, 'a':1,  'c':2,  'g':3,  't':4, 'A':1, 'C':2, 'G':3, 'T':4, '-':5}
 itos = {0: '<pad>', 1:'a',  2:'c',  3:'g',  4:'t', 1:'A', 2:'C', 3:'G', 4:'T', 5:'-'}
 
 
 
-#print("Prepare computing environment...")
-# Model configuration
+print("Prepare computing environment...")
+#Model configuration
 
 ENC_INPUT_DIM = 6
 ENC_EMB_DIM = 256
@@ -116,7 +126,7 @@ def get_model():
     model2 = Net(ENC_INPUT_DIM, ENC_EMB_DIM, ENC_HID_DIM, N_LAYERS, ENC_DROPOUT).to(device)
     model2.load_state_dict( torch.load(cbe_model_file,map_location=torch.device(device)))
         
-    return model1,model2
+    return model1, model2
 
 
 class gRNADataset(Dataset):
@@ -210,4 +220,57 @@ def prep_inputs(df_inputs):
                       collate_fn=generate_batch )
     return batches
 
+print("Load model...")
+model_off = get_model()
 
+def main():
+    input_file = Path(args.input_file)
+    stem = input_file.stem
+    output_dir = utils.safe_makedir(input_file.parent / 'off_output')
+    eff_file = input_file.parent / 'off_output' / (str(input_file.stem) + '_eff.csv')
+
+    if not input_file.is_file():
+        exit("File doesn't exist!")
+    else:
+        print("Load input file...")
+        try:
+            #CBE
+            if input_file:
+                df_inputs = pd.read_csv( input_file, sep='\t')
+                if len( df_inputs.columns ) == 8:
+                    '''
+                    Cas-Offinder output
+                    '''
+                    cols = ['#Bulge_type', 'crRNA', 'DNA', 'Chromosome', 'Position', 'Direction',
+        'Mismatches', 'Bulge_Size']
+                    df_inputs.columns = cols                
+                else:
+                    '''
+                    CRISPRtiz output
+                    '''
+                    cols = ['#Bulge_type', 'crRNA', 'DNA', 'Chromosome', 'Position',
+        'Cluster Position', 'Direction', 'Mismatches', 'Bulge_Size', 'Total']
+                    df_inputs.columns = cols
+                    df_inputs = df_inputs[['#Bulge_type', 'crRNA', 'DNA', 'Chromosome', 'Position',
+        'Direction', 'Mismatches', 'Bulge_Size']]
+                    
+                source = df_inputs[df_inputs.Mismatches == 0].DNA.values[0]
+                df_inputs['source'] = source
+                df_inputs['target'] = df_inputs.DNA
+                df_inputs.reset_index(drop=True,inplace=True) 
+            else:
+                df_inputs = pd.read_csv( input_file, sep=' ',header=None )
+                df_inputs.columns = ['source','target']
+            batches = prep_inputs(df_inputs)
+            model = model_off[0] if args.base_editor == "ABE" else model_off[1]
+            print("Do prediction...")
+            df_eff = do_pred( batches, model ).reset_index( drop=True )
+            if input_file:
+                df_eff = pd.concat([ df_inputs.iloc[:,:8], df_eff.eff_pred ], axis=1)
+            df_eff.sort_values( by='eff_pred', ascending=False ).to_csv(eff_file)
+            print("Finished prediciton!")
+        except Exception as e:
+            print(str(e))
+
+if __name__ == "__main__":
+    main()

@@ -38,6 +38,17 @@ torch.backends.cudnn.deterministic = True
 stoi = {'<pad>':0, 'a':1,  'c':2,  'g':3,  't':4, 'A':1, 'C':2, 'G':3, 'T':4, '-':5}
 itos = {0: '<pad>', 1:'a',  2:'c',  3:'g',  4:'t', 1:'A', 2:'C', 3:'G', 4:'T', 5:'-'}
 
+
+import argparse
+parser = argparse.ArgumentParser(description="BEdeepon for ABEmax and AncBE4max")
+parser.add_argument("-b", "--base-editor", 
+                    choices=["ABE", "CBE"],
+                    required=True,
+                    help="set base editor model")
+parser.add_argument("-i","--input-file",help="set input tsv file")
+args = parser.parse_args()
+
+
 print("Preparing computing environment...")
 # Model configuration
 
@@ -334,3 +345,36 @@ def prep_inputs(df_inputs,is_ABE=True):
     dataset = gRNADataset( df_[['seq1','seq2','is_edit']] )
     batches =  DataLoader(dataset, batch_sampler=BatchSampler(grp_.keys(), grp_), collate_fn=generate_batch) 
     return batches
+
+print("Load model...")
+model_on = get_model()
+
+def main():
+    input_file = Path(args.input_file)
+    stem = input_file.stem
+    output_dir = utils.safe_makedir(input_file.parent / 'on_output')
+    eff_file = input_file.parent / 'on_output' / (str(input_file.stem) + '_eff.csv')
+    outcomes_file = input_file.parent / 'on_output' / (str(input_file.stem) + '_outcomes.csv')
+
+    if not input_file.is_file():
+        exit("File doesn't exist!")
+    else:
+        print("Load input file...")
+        try:
+            df_inputs = pd.read_csv(input_file)
+            df_inputs.columns = ['source']
+            #前端 base_editor 1: ABE ，0 ：CBE
+            model = model_on[0] if args.base_editor == "ABE" else model_on[1]
+            is_ABE = True if args.base_editor == "ABE" else False
+            print("Do prediction...")
+            batches = prep_inputs( df_inputs, is_ABE=base_editor )
+            df_eff,df_outcomes = do_pred( batches, model )
+            res_eff = df_eff.sort_values( by = 'eff_pred', ascending = False ).reset_index( drop=True )
+            res_outcome = df_outcomes.reset_index( drop=True )
+            res_eff.to_csv(eff_file)
+            res_outcome.to_csv(outcomes_file)
+            print("Finished prediciton!")
+        except Exception as e:
+            print(str(text))
+if __name__ == "__main__":
+    main() 
