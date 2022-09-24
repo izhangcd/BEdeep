@@ -12,12 +12,14 @@ The required software/packages are:
 
 
 ### Help
+- training.py Off-target models training for ABEmax and AncBE4max
+
+  -b {ABE,CBE} Set base editor model training
 - bedeepoff.py Off-target models for ABEmax and AncBE4max
 
   -b {ABE,CBE} Set base editor model
 
   -i INPUT_FILE Set input tsv file
-
 ### Example Call
 - Off-target ABE/CBE model training:
 ```bash
