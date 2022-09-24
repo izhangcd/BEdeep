@@ -37,7 +37,7 @@ python bedeepoff.py -b ABE -i ./cas-offinder/CRISPRitz_Output_Example.txt
 ### Files description
 * [bedeepoff.py](https://github.com/izhangcd/BEdeep/blob/main/bedeepoff.py) contains the contains the core code of prediction module for the website [www.DeepHF.com](http://www.deephf.com).
 * [training.py](https://github.com/izhangcd/BEdeep/blob/main/training.py) contains the code for ABEdeepoff and CBEdeepoff model training.
-* [ABEdeepoff.txt](https://github.com/izhangcd/BEdeep/blob/main/Data/ABEdeepoff.txt) contains the raw data for ABEdeepoff model training.
-* [CBEdeepoff.txt](https://github.com/izhangcd/BEdeep/blob/main/Data/CBEdeepoff.txt) contains the raw data for CBEdeepoff model training.
-* [ABEdeepoff.pt](https://github.com/izhangcd/BEdeep/blob/main/Models/ABEdeepoff.pt) the final model file of ABEdeepoff used in the DeepHF wibsite.
-* [CBEdeepoff.pt](https://github.com/izhangcd/BEdeep/blob/main/Models/CBEdeepoff.pt) the final model file of CBEdeepoff used in the DeepHF wibsite.
+* [Data/ABEdeepoff.txt](https://github.com/izhangcd/BEdeep/blob/main/Data/ABEdeepoff.txt) contains the raw data for ABEdeepoff model training.
+* [Data/CBEdeepoff.txt](https://github.com/izhangcd/BEdeep/blob/main/Data/CBEdeepoff.txt) contains the raw data for CBEdeepoff model training.
+* [Models/ABEdeepoff.pt](https://github.com/izhangcd/BEdeep/blob/main/Models/ABEdeepoff.pt) the final model file of ABEdeepoff used in the DeepHF wibsite.
+* [Models/CBEdeepoff.pt](https://github.com/izhangcd/BEdeep/blob/main/Models/CBEdeepoff.pt) the final model file of CBEdeepoff used in the DeepHF wibsite.
