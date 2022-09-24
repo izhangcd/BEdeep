@@ -4,29 +4,27 @@ The code were tesed on Linux and Mac OS systems.
 The required software/packages are:
 * python>=3.6.5
 * numpy=1.19.1
-* Pytorch=1.6.0
+* Pytorch=1.11.0
 * scikit-learn
-* biopython=1.78
+* biopython=1.79
 * pandas
+* pkbar
 
 
 ### Help
-- bedeepon.py On-target models for ABEmax and AncBE4max
+- training.py Off-target models training for ABEmax and AncBE4max
 
-  -b {ABE,CBE} set base editor model
-  
-  -i INPUT_FILE set input tsv file
-
+  -b {ABE,CBE} Set base editor model training
 - bedeepoff.py Off-target models for ABEmax and AncBE4max
 
   -b {ABE,CBE} Set base editor model
 
   -i INPUT_FILE Set input tsv file
-
 ### Example Call
-- On-target ABE prediction:
+- Off-target ABE/CBE model training:
 ```bash
-python bedeepon.py -b ABE -i ./Example/On-target.tsv
+python training.py -b ABE
+python training.py -b CBE
 ```
 - Off-target ABE prediction for Cas-OFFinder output:
 ```bash
