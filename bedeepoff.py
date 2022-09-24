@@ -70,19 +70,20 @@ class Net(nn.Module):
         self.enc_hid_dim = enc_hid_dim
         
         self.embedding = nn.EmbeddingBag(input_dim, emb_dim)
-        
+        self.norm1 = nn.LayerNorm(emb_dim)
         self.rnn = nn.LSTM(emb_dim, enc_hid_dim, n_layers, bidirectional = True)
         
         
         self.dropout = nn.Dropout(dropout)
         self.fc_feat = nn.Linear(6*self.enc_hid_dim, 3*self.enc_hid_dim)
+        self.norm3 = nn.LayerNorm(3 * enc_hid_dim)
         self.fc_out = nn.Linear(3*self.enc_hid_dim, 1)
         self.len = 10
         
     def forward(self, seq, offset,length):
         global debug_var
         emb = self.dropout(self.embedding(seq, offset))
-        
+        emb = self.norm1(emb)
         #根据开始位置确定结束位置
         l_b = length.cumsum(dim=0)
 
@@ -113,7 +114,7 @@ class Net(nn.Module):
         max_pool, _ = torch.max( pad_out.permute(1,0,2), 1)
         x = torch.cat([ hidden, avg_pool, max_pool ], dim=1)
         x = self.dropout(F.relu(self.fc_feat( x )))
-
+        x = self.norm3(x)
         fc_out = self.fc_out(x)
         
         return fc_out
