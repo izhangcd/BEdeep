@@ -1,43 +1,38 @@
 ### System requirements
-The code were tesed on Linux and Mac OS systems.
 
-The required software/packages are:
-* python>=3.6.5
-* numpy=1.19.1
-* Pytorch=1.11.0
-* scikit-learn
-* biopython=1.79
-* pandas
-* pkbar
+The code were tesed on Linux and Mac OS systems. The required software/packages are:
 
+- python==3.10.8
+- matplotlib==3.7.0
+- logging==0.5.1.2
+- pkbar==0.5
+- torch==1.13.1
+- numpy==1.23.5
+- pandas==1.4.3
+- Bio==1.78
+- sklearn==1.1.1
 
-### Help
-- training.py Off-target models training for ABEmax and AncBE4max
+It is worth noting that when the computing environment(e.g, the version of tensorflow or biopython) changes, the prediction results might change slightly, but the main conclusion won't be affected.
 
-  -b {ABE,CBE} Set base editor model training
-- bedeepoff.py Off-target models for ABEmax and AncBE4max
+### Installation Guide
 
-  -b {ABE,CBE} Set base editor model
-
-  -i INPUT_FILE Set input tsv file
-### Example Call
-- Off-target ABE/CBE model training:
-```bash
-python training.py -b ABE
-python training.py -b CBE
+```shell
+conda create -n pytorch python=3.10.8 ipykernel matplotlib=3.7.0 logging=0.5.1.2 pkbar=0.5 torch=1.13.1 numpy=1.23.5 pandas=1.4.3 Bio=1.78 sklearn=1.1.1
+ipython kernel install --user --name crispr --display-name "Python3(pytorch)"
 ```
-- Off-target ABE prediction for Cas-OFFinder output:
-```bash
-python bedeepoff.py -b ABE -i ./cas-offinder/Cas-Offinder_Output_Example.txt
-```
-- Off-target ABE prediction for CRISPRitz output:
-```bash
-python bedeepoff.py -b ABE -i ./cas-offinder/CRISPRitz_Output_Example.txt
-```
+
+Installation time depends on your own network environment.
+
 ### Files description
-* [bedeepoff.py](https://github.com/izhangcd/BEdeep/blob/main/bedeepoff.py) contains the contains the core code of prediction module for the website [www.DeepHF.com](http://www.deephf.com).
-* [training.py](https://github.com/izhangcd/BEdeep/blob/main/training.py) contains the code for ABEdeepoff and CBEdeepoff model training.
-* [Data/ABEdeepoff.txt](https://github.com/izhangcd/BEdeep/blob/main/Data/ABEdeepoff.txt) contains the raw data for ABEdeepoff model training.
-* [Data/CBEdeepoff.txt](https://github.com/izhangcd/BEdeep/blob/main/Data/CBEdeepoff.txt) contains the raw data for CBEdeepoff model training.
-* [Models/ABEdeepoff.pt](https://github.com/izhangcd/BEdeep/blob/main/Models/ABEdeepoff.pt) the final model file of ABEdeepoff used in the DeepHF wibsite.
-* [Models/CBEdeepoff.pt](https://github.com/izhangcd/BEdeep/blob/main/Models/CBEdeepoff.pt) the final model file of CBEdeepoff used in the DeepHF wibsite.
+
+[ABEdeepoff.ipynb](https://github.com/izhangcd/DeepHF/blob/master/ABEdeepoff.ipynb) provides the code for training model in your own computing environment for ABE.
+
+[CBEdeepoff.ipynb](https://github.com/izhangcd/DeepHF/blob/master/CBEdeepoff.ipynb) provides the code for training model in your own computing environment for CBE.
+
+[data/ABEdeepoff.txt](https://github.com/izhangcd/DeepHF/blob/master/data/ABEdeepoff.txt) experimental edit efficiency data for ABE. It can be used to train the model.
+
+[data/CBEdeepoff.txt](https://github.com/izhangcd/DeepHF/blob/master/data/CBEdeepoff.txt) experimental edit efficiency data for CBE. It can be used to train the model.
+
+[data/ABE_Off_endo.txt](https://github.com/izhangcd/DeepHF/blob/master/data/ABE_Off_endo.txt) experimental edit efficiency data from independent publication dataset. It can be used to test the model.
+
+[data/CBE_Off_endo.txt](https://github.com/izhangcd/DeepHF/blob/master/data/CBE_Off_endo.txt) experimental edit efficiency data from independent publication dataset. It can be used to test the model.

@@ -1,49 +1,9 @@
-import glob
-import gzip
-import os
-import tempfile
-import time
-import shutil
-import contextlib
-import itertools
-import functools
-import random
-import fnmatch
-import subprocess
-import sys
-import types
-
-import six
-# import toolz as tz
-# import yaml
-
-
-def safe_makedir(dname):
-    """Make a directory if it doesn't exist, handling concurrent race conditions.
-    """
-    if not dname:
-        return dname
-    num_tries = 0
-    max_tries = 5
-    while not os.path.exists(dname):
-        # we could get an error here if multiple processes are creating
-        # the directory at the same time. Grr, concurrency.
-        try:
-            os.makedirs(dname)
-        except OSError:
-            if num_tries > max_tries:
-                raise
-            num_tries += 1
-            time.sleep(2)
-    return dname
-
-
 import numpy as np
 import torch
 
 class EarlyStopping:
     """Early stops the training if validation loss doesn't improve after a given patience."""
-    def __init__(self, patience=7, verbose=False, delta=0, path='checkpoint.pt', trace_func=print):
+    def __init__(self, patience=7, delta=0, path='RNN_checkpoint.pt', trace_func=print, verbose=False):
         """
         Args:
             patience (int): How long to wait after last time validation loss improved.
@@ -52,8 +12,8 @@ class EarlyStopping:
                             Default: False
             delta (float): Minimum change in the monitored quantity to qualify as an improvement.
                             Default: 0
-            path (str): Path for the checkpoint to be saved to.
-                            Default: 'checkpoint.pt'
+            path (str): Path for the RNN_checkpoint to be saved to.
+                            Default: 'RNN_checkpoint.pt'
             trace_func (function): trace print function.
                             Default: print            
         """
@@ -72,7 +32,7 @@ class EarlyStopping:
 
         if self.best_score is None:
             self.best_score = score
-            self.save_checkpoint(val_loss, model, p)
+            self.save_RNN_checkpoint(val_loss, model, p)
         elif score < self.best_score + self.delta:
             self.counter += 1
             self.trace_func(f'EarlyStopping counter: {self.counter} out of {self.patience}')
@@ -81,9 +41,9 @@ class EarlyStopping:
         else:
             self.best_score = score
             self.counter = 0
-            self.save_checkpoint(val_loss, model, p)
+            self.save_RNN_checkpoint(val_loss, model, p)
 
-    def save_checkpoint(self, val_loss, model, p):
+    def save_RNN_checkpoint(self, val_loss, model, p):
         '''Saves model when validation loss decrease.'''
         if self.verbose:
             self.trace_func(f'Validation loss decreased ({self.val_loss_min:.6f} --> {val_loss:.6f}).  Saving model ...')
