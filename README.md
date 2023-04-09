@@ -27,12 +27,12 @@ Installation time depends on your own network environment.
 
 [ABEdeepoff.ipynb](https://github.com/izhangcd/BEdeep/blob/main/ABEdeepoff.ipynb) provides the code for training model in your own computing environment for ABE.
 
-[CBEdeepoff.ipynb](https://github.com/izhangcd/DeepHF/blob/main/CBEdeepoff.ipynb) provides the code for training model in your own computing environment for CBE.
+[CBEdeepoff.ipynb](https://github.com/izhangcd/BEdeep/blob/main/CBEdeepoff.ipynb) provides the code for training model in your own computing environment for CBE.
 
-[data/ABEdeepoff.txt](https://github.com/izhangcd/DeepHF/blob/main/data/ABEdeepoff.txt) experimental edit efficiency data for ABE. It can be used to train the model.
+[data/ABEdeepoff.txt](https://github.com/izhangcd/BEdeep/blob/main/data/ABEdeepoff.txt) experimental edit efficiency data for ABE. It can be used to train the model.
 
-[data/CBEdeepoff.txt](https://github.com/izhangcd/DeepHF/blob/main/data/CBEdeepoff.txt) experimental edit efficiency data for CBE. It can be used to train the model.
+[data/CBEdeepoff.txt](https://github.com/izhangcd/BEdeep/blob/main/data/CBEdeepoff.txt) experimental edit efficiency data for CBE. It can be used to train the model.
 
-[data/ABE_Off_endo.txt](https://github.com/izhangcd/DeepHF/blob/main/data/ABE_Off_endo.txt) experimental edit efficiency data from independent publication dataset. It can be used to test the model.
+[data/ABE_Off_endo.txt](https://github.com/izhangcd/BEdeep/blob/main/data/ABE_Off_endo.txt) experimental edit efficiency data from independent publication dataset. It can be used to test the model.
 
-[data/CBE_Off_endo.txt](https://github.com/izhangcd/DeepHF/blob/main/data/CBE_Off_endo.txt) experimental edit efficiency data from independent publication dataset. It can be used to test the model.
+[data/CBE_Off_endo.txt](https://github.com/izhangcd/BEdeep/blob/main/data/CBE_Off_endo.txt) experimental edit efficiency data from independent publication dataset. It can be used to test the model.
