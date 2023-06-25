@@ -36,3 +36,30 @@ Installation time depends on your own network environment.
 [data/ABE_Off_endo.txt](https://github.com/izhangcd/BEdeep/blob/main/data/ABE_Off_endo.txt) experimental edit efficiency data from independent publication dataset. It can be used to test the model.
 
 [data/CBE_Off_endo.txt](https://github.com/izhangcd/BEdeep/blob/main/data/CBE_Off_endo.txt) experimental edit efficiency data from independent publication dataset. It can be used to test the model.
+
+[model/ABEdeepoff.pt](https://github.com/izhangcd/BEdeep/blob/main/model/ABEdeepoff.pt) ABEdeepoff model parameters used in online webserver.
+
+[model/CBEdeepoff.pt](https://github.com/izhangcd/BEdeep/blob/main/model/CBEdeepoff.pt) CBEdeepoff model parameters used in online webserver.
+
+[BEdeepoff.py](https://github.com/izhangcd/BEdeep/blob/main/BEdeepoff.py) Local version of ABEdeepoff and CBEdeepoff model.
+
+### Local version usage
+
+```shell
+usage: BEdeepoff.py [-h] [-i INPUT_FILE] [-o OUTPUT_FILE] [-t {ABE,CBE}]
+
+Local version of ABEdeepoff and CBEdeepoff.
+
+options:
+  -h, --help            show this help message and exit
+  -i INPUT_FILE, --input-file INPUT_FILE
+                        Input file include gRNA and offtarget sequences (tab-delimited).
+  -o OUTPUT_FILE, --output-file OUTPUT_FILE
+                        Output table file name.
+  -t {ABE,CBE}, --editor-type {ABE,CBE}
+                        Base editor type.
+                        
+# demo
+python3 BEdeepoff.py -i input.txt -o output.txt -t ABE
+```
+
