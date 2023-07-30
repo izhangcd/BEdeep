@@ -41,7 +41,7 @@ class Net(nn.Module):
         super(Net, self).__init__()
         
         self.embedding_1 = nn.Embedding(input_dim, emb_dim)
-        self.embedding_2 = nn.Embedding(input_dim, emb_dim, _weight=self.embedding_1.weight)
+        self.embedding_2 = nn.Embedding(input_dim, emb_dim)
         self.rnn = nn.LSTM(input_size=emb_dim, hidden_size=hid_dim, num_layers=n_layers,
                            bidirectional=True)
         self.dropout = nn.Dropout(dropout)     
